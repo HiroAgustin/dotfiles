@@ -24,8 +24,14 @@
 	# List local branches
 	b = branch
 
+	# Get default branch name
+	defaultBranch = !git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
+
+	# Checkout to defaultBranch
+	m = !git checkout $(git defaultBranch)
+
 	# Reset all commits on the current branch to the common ancestor with the default branch keeping all changes staged.
-	squash = !"git reset --soft $(git merge-base $(git config --get init.defaultBranch || echo main) HEAD)"
+	squash = !"git reset --soft $(git merge-base $(git defaultBranch || echo main) HEAD)"
 
 	# Switch to a branch, creating it if necessary.
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
